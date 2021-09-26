@@ -35,10 +35,15 @@ func main() {
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err.Error())
+
+		return
+	}
 
 	found := bytes.Contains(body, []byte(suffix))
 
-	if found == true {
+	if found {
 		fmt.Println("Oh no — pwned!")
 	} else {
 		fmt.Println("Good news — no pwnage found!")
