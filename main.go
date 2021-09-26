@@ -7,21 +7,23 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
+	"syscall"
+
+	"golang.org/x/term"
 )
 
 func main() {
-	args := os.Args[1:]
-	if len(args) == 0 {
+	fmt.Print("Enter Password: ")
+	in, err := term.ReadPassword(int(syscall.Stdin))
+	if err != nil {
 		fmt.Println("Missing password")
 
 		return
 	}
 
-	password := args[0]
 	h := sha1.New()
-	io.WriteString(h, password)
+	io.WriteString(h, string(in))
 	hash := strings.ToUpper(fmt.Sprintf("%x", h.Sum(nil)))
 
 	prefix := hash[0:5]
